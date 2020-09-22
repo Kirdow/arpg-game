@@ -16,13 +16,8 @@ public class Game {
 
     }
 
-    private final Random r = new Random();
     public void draw(Screen fb) {
-        for (int y = 0; y < fb.h; y++) {
-            for (int x = 0; x < fb.w; x++) {
-                fb.pixels[x + y * fb.w] = r.nextInt();
-            }
-        }
+        
     }
 
     public static final Game getGame() {

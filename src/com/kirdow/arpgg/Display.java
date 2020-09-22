@@ -1,5 +1,6 @@
 package com.kirdow.arpgg;
 
+import com.kirdow.arpgg.game.Game;
 import com.kirdow.arpgg.gfx.Screen;
 
 import javax.swing.*;
@@ -21,6 +22,8 @@ public class Display extends Canvas {
 
     private Thread gameThread;
     private boolean running;
+
+    private Game game;
 
     private Display(int width, int height) {
         Display.width = width;
@@ -64,6 +67,8 @@ public class Display extends Canvas {
         pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 
         fbScreen = new Screen(width, height);
+
+        game = Game.getGame();
     }
 
     private void run() {
@@ -103,7 +108,7 @@ public class Display extends Canvas {
     }
 
     private void tick() {
-
+        game.tick();
     }
 
     private void render() {
@@ -116,7 +121,7 @@ public class Display extends Canvas {
 
         fbScreen.clear(0);
 
-        // TODO: Draw scene
+        game.draw(fbScreen);
 
         fbScreen.flush(pixels);
 
