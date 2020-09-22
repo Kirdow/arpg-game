@@ -1,5 +1,7 @@
 package com.kirdow.arpgg;
 
+import com.kirdow.arpgg.gfx.Screen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -15,6 +17,7 @@ public class Display extends Canvas {
     private JFrame frame;
     private BufferedImage image;
     private int[] pixels;
+    private Screen fbScreen;
 
     private Thread gameThread;
     private boolean running;
@@ -42,12 +45,13 @@ public class Display extends Canvas {
     }
 
     private void initDisplay() {
-        frame = new JFrame("ARPGG");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension dim = new Dimension(width, height);
         this.setMinimumSize(dim);
         this.setMaximumSize(dim);
         this.setPreferredSize(dim);
+
+        frame = new JFrame("ARPGG");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(this);
         frame.setResizable(false);
         frame.pack();
@@ -58,6 +62,8 @@ public class Display extends Canvas {
     private void init() {
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+
+        fbScreen = new Screen(width, height);
     }
 
     private void run() {
@@ -108,11 +114,11 @@ public class Display extends Canvas {
             return;
         }
 
-        // TODO: Clear framebuffer
+        fbScreen.clear(0);
 
         // TODO: Draw scene
 
-        // TODO: Flush framebuffer
+        fbScreen.flush(pixels);
 
         Graphics g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, width, height, null);
