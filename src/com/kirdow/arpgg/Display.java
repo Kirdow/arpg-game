@@ -2,6 +2,7 @@ package com.kirdow.arpgg;
 
 import com.kirdow.arpgg.game.Game;
 import com.kirdow.arpgg.gfx.Screen;
+import com.kirdow.arpgg.input.Input;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,7 @@ public class Display extends Canvas {
     private boolean running;
 
     private Game game;
+    private Input input;
 
     private Display(int width, int height) {
         Display.width = width;
@@ -53,6 +55,11 @@ public class Display extends Canvas {
         this.setMaximumSize(dim);
         this.setPreferredSize(dim);
 
+        input = new Input();
+        this.addKeyListener(input);
+        this.addMouseListener(input);
+        this.addMouseMotionListener(input);
+
         frame = new JFrame("ARPGG");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(this);
@@ -75,7 +82,7 @@ public class Display extends Canvas {
         init();
 
         final long SEC = 1_000_000_000;
-        final long tickDelay = SEC / 20;
+        final long tickDelay = SEC / GameTimer.TPS;
         long ticks = 0;
         long frames = 0;
         long frameTimer = System.nanoTime();
