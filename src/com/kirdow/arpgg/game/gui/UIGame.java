@@ -1,6 +1,7 @@
 package com.kirdow.arpgg.game.gui;
 
 import com.kirdow.arpgg.GameTimer;
+import com.kirdow.arpgg.game.level.Level;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.gfx.Textures;
 import com.kirdow.arpgg.input.Input;
@@ -16,6 +17,8 @@ public class UIGame extends UIBase {
     private float playerX;
     private float playerY;
 
+    private Level level;
+
     public UIGame() {
         super("Game");
         pauseMenu = null;
@@ -27,39 +30,60 @@ public class UIGame extends UIBase {
 
         playerX = 0;
         playerY = 0;
+
+        level = new Level(64, 64);
     }
 
     @Override
     public void tick() {
         if (pauseMenu != null) {
             pauseMenu.tick();
-        } else {
-            int xMove = 0, yMove = 0;
-            float speed = 12f;
-
-            if (Input.isKeyDown(KeyEvent.VK_A)) {
-                --xMove;
-            }
-            if (Input.isKeyDown(KeyEvent.VK_D)) {
-                ++xMove;
-            }
-
-            if (Input.isKeyDown(KeyEvent.VK_W)) {
-                --yMove;
-            }
-            if (Input.isKeyDown(KeyEvent.VK_S)) {
-                ++yMove;
-            }
-
-            if (xMove != 0)
-                playerX += GameTimer.DELTA * xMove * speed;
-            if (yMove != 0)
-                playerY += GameTimer.DELTA * yMove * speed;
+            return;
         }
+
+        if (level != null) {
+            level.tick();
+        }
+        int xMove = 0, yMove = 0;
+        float speed = 12f;
+
+        if (Input.isKeyDown(KeyEvent.VK_A)) {
+            --xMove;
+        }
+        if (Input.isKeyDown(KeyEvent.VK_D)) {
+            ++xMove;
+        }
+
+        if (Input.isKeyDown(KeyEvent.VK_W)) {
+            --yMove;
+        }
+        if (Input.isKeyDown(KeyEvent.VK_S)) {
+            ++yMove;
+        }
+
+        if (xMove != 0)
+            playerX += GameTimer.DELTA * xMove * speed;
+        if (yMove != 0)
+            playerY += GameTimer.DELTA * yMove * speed;
     }
 
     @Override
     public void draw(Screen fb) {
+
+        boolean shouldDrawPause = true;
+        try {
+            if (level != null) {
+                level.draw(fb);
+            }
+        } catch (Throwable ex) {
+            shouldDrawPause = false;
+            throw ex;
+        } finally {
+            if (shouldDrawPause && pauseMenu != null) {
+                pauseMenu.draw(fb);
+            }
+        }
+        /*
         for (int y = 0; y < fb.h; y++) {
             int tileY = (int)((y + this.playerY * 4.0f) / 4) & 0xF;
             for (int x = 0; x < fb.w; x++) {
@@ -70,7 +94,7 @@ public class UIGame extends UIBase {
                 int tileTexY = tileId / 16;
                 fb.pixels[x + y * fb.w] = Textures.TILEMAP.pixels[(tileTexX * 16 + tileX) + (tileTexY * 16 + tileY) * Textures.TILEMAP.w];
             }
-        }
+        }*/
     }
 
     @Override

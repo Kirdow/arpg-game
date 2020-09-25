@@ -40,4 +40,23 @@ public class Screen {
         fillRect(x0, y0, x0 + w, y0 + h, c);
     }
 
+    public void drawTile(int x, int y, int tile) {
+        int tx = tile % 16;
+        int ty = tile / 16;
+        int taPos = tx * 16 + ty * 16 * Textures.TILEMAP.w;
+
+        for (int fy = 0; fy < 16; fy++) {
+            int py = fy + y;
+            if (py < 0 || py >= h) continue;
+            for (int fx = 0; fx < 16; fx++) {
+                int px = fx + x;
+                if (px < 0 || px >= w) continue;
+
+                int pixel = Textures.TILEMAP.pixels[fx + fy * Textures.TILEMAP.w + taPos];
+                if (pixel == 0xFF00FF || pixel == 0x7F007F) continue;
+                pixels[px + py * w] = pixel;
+            }
+        }
+    }
+
 }

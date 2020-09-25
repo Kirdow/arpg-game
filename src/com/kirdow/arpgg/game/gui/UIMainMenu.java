@@ -1,5 +1,6 @@
 package com.kirdow.arpgg.game.gui;
 
+import com.kirdow.arpgg.GameTimer;
 import com.kirdow.arpgg.gfx.Font;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.gfx.Textures;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 public class UIMainMenu extends UIBase {
 
-    private int xTimer;
+    private float xTimer;
 
     public UIMainMenu() {
         super("MainMenu");
@@ -40,7 +41,7 @@ public class UIMainMenu extends UIBase {
 
     @Override
     public void tick() {
-        xTimer = (xTimer + 1) & 0x3F;
+        xTimer = (xTimer + 20.0f * GameTimer.DELTA) % 64;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class UIMainMenu extends UIBase {
         for (int y = 0; y < fb.h; y++) {
             int tileY = (y) & 0xF;
             for (int x = 0; x < fb.w; x++) {
-                int tileX = (((0x3F - xTimer) + x)) & 0xF;
+                int tileX = (((0x3F - (int)xTimer) + x)) & 0xF;
 
                 fb.pixels[x + y * fb.w] = TILEMAP.pixels[(tileId.ix * 16 + tileX) + (tileId.iy * 16 + tileY) * TILEMAP.w];
             }
