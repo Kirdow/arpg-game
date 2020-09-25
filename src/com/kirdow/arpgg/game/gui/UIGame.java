@@ -3,12 +3,9 @@ package com.kirdow.arpgg.game.gui;
 import com.kirdow.arpgg.GameTimer;
 import com.kirdow.arpgg.game.level.Level;
 import com.kirdow.arpgg.gfx.Screen;
-import com.kirdow.arpgg.gfx.Textures;
 import com.kirdow.arpgg.input.Input;
-import com.kirdow.arpgg.util.Vectori;
 
 import java.awt.event.KeyEvent;
-import java.util.Random;
 
 public class UIGame extends UIBase {
 
@@ -69,32 +66,13 @@ public class UIGame extends UIBase {
 
     @Override
     public void draw(Screen fb) {
-
-        boolean shouldDrawPause = true;
-        try {
-            if (level != null) {
-                level.draw(fb);
-            }
-        } catch (Throwable ex) {
-            shouldDrawPause = false;
-            throw ex;
-        } finally {
-            if (shouldDrawPause && pauseMenu != null) {
-                pauseMenu.draw(fb);
-            }
+        if (level != null) {
+            level.draw(fb);
         }
-        /*
-        for (int y = 0; y < fb.h; y++) {
-            int tileY = (int)((y + this.playerY * 4.0f) / 4) & 0xF;
-            for (int x = 0; x < fb.w; x++) {
-                int tileX = (int)((x + this.playerX * 4.0f) / 4) & 0xF;
-                int tileId = getTileFromPixel(x, y);
 
-                int tileTexX = tileId % 16;
-                int tileTexY = tileId / 16;
-                fb.pixels[x + y * fb.w] = Textures.TILEMAP.pixels[(tileTexX * 16 + tileX) + (tileTexY * 16 + tileY) * Textures.TILEMAP.w];
-            }
-        }*/
+        if (pauseMenu != null) {
+            pauseMenu.draw(fb);
+        }
     }
 
     @Override

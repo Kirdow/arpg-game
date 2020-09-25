@@ -1,5 +1,6 @@
 package com.kirdow.arpgg.game.level;
 
+import com.kirdow.arpgg.GameTimer;
 import com.kirdow.arpgg.game.level.tile.Tile;
 import com.kirdow.arpgg.gfx.Screen;
 
@@ -57,8 +58,8 @@ public class Level {
     }
 
     public void tick() {
-        x += 1.0f;
-        y += 1.5f;
+        x += 20.0f * GameTimer.DELTA;
+        y += 30.0f * GameTimer.DELTA;
     }
 
     private float x;
