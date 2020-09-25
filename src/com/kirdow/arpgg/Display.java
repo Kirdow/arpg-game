@@ -81,37 +81,19 @@ public class Display extends Canvas {
     private void run() {
         init();
 
-        final long SEC = 1_000_000_000;
-        final long tickDelay = SEC / GameTimer.TPS;
-        long ticks = 0;
-        long frames = 0;
-        long frameTimer = System.nanoTime();
-        long tickTimer = System.nanoTime();
-        long lastTick = System.nanoTime();
-        while (running) {
-            long currentTick = System.nanoTime();
-            long tickDiff = currentTick - lastTick;
-            if (tickDiff > tickDelay) {
-                ticks++;
-                if ((currentTick - tickTimer) >= SEC) {
-                    GameTimer.set((int)ticks, -1);
-                    ticks = 0;
-                    tickTimer = currentTick;
-                }
-                lastTick = currentTick;
-                tick();
-            }
+        GameTimer.setTickCallback(this::tick);
+        GameTimer.setDrawCallback(this::render);
 
-            long currentFrame = System.nanoTime();
-            long frameDiff = currentFrame - frameTimer;
-            frames++;
-            if (frameDiff > SEC) {
-                GameTimer.set(-1, (int)frames);
-                System.out.printf("FPS: %d\n", frames);
-                frames = 0;
-                frameTimer = currentFrame;
+        while (running) {
+            try {
+                GameTimer.cycle();
+            } catch (NullPointerException ex) {
+                ex.printStackTrace();
+                game.setCurrentGui(null);
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+                running = false;
             }
-            render();
         }
     }
 
