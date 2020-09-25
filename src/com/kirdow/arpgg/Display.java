@@ -70,10 +70,10 @@ public class Display extends Canvas {
     }
 
     private void init() {
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        image = new BufferedImage(width / 4, height / 4, BufferedImage.TYPE_INT_RGB);
         pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 
-        fbScreen = new Screen(width, height);
+        fbScreen = new Screen(width / 4, height / 4);
 
         game = Game.getGame();
     }
@@ -94,7 +94,7 @@ public class Display extends Canvas {
             if (tickDiff > tickDelay) {
                 ticks++;
                 if ((currentTick - tickTimer) >= SEC) {
-                    System.out.printf("TPS: %d\n", ticks);
+                    GameTimer.set((int)ticks, -1);
                     ticks = 0;
                     tickTimer = currentTick;
                 }
@@ -106,6 +106,7 @@ public class Display extends Canvas {
             long frameDiff = currentFrame - frameTimer;
             frames++;
             if (frameDiff > SEC) {
+                GameTimer.set(-1, (int)frames);
                 System.out.printf("FPS: %d\n", frames);
                 frames = 0;
                 frameTimer = currentFrame;

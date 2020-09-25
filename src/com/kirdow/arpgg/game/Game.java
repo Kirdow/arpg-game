@@ -27,6 +27,7 @@ public class Game {
     public void draw(Screen fb) {
         if (currentGui != null) {
             currentGui.draw(fb);
+            currentGui.drawInfo(fb);
         }
     }
 

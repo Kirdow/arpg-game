@@ -114,7 +114,6 @@ public class Font {
         int xpos = x;
         for (char c : text.toCharArray()) {
             int width = getCharWidth(c);
-            System.out.println(String.format("C%s I%s", c, width));
             if (width == -1)
                 continue;
 
@@ -130,8 +129,6 @@ public class Font {
     public static void draw(char c, Screen fb, int x, int y, int color, int pixelSize) {
         int cX = (c % 16) * 8;
         int cY = (c / 16) * 8;
-
-        System.out.println(String.format("x%s y%s", cX / 8, cY / 8));
 
         int sy, sx, spx, spy;
         for (int xp = 0; xp < 8; xp++) {

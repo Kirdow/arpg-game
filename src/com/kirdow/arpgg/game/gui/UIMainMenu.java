@@ -34,7 +34,6 @@ public class UIMainMenu extends UIBase {
         int id = rnum % IDS.length;
         if (id < 0)
             id += IDS.length;
-        System.out.println(String.format("%d%%%d=%d", rnum, IDS.length, id));
 
         tileId = IDS[id];
     }
@@ -46,13 +45,13 @@ public class UIMainMenu extends UIBase {
 
     @Override
     public void draw(Screen fb) {
-        final int w2 = 50;
+        final int w2 = 12;
 
         final Screen TILEMAP = Textures.TILEMAP;
         for (int y = 0; y < fb.h; y++) {
-            int tileY = (y >> 2) & 0xF;
+            int tileY = (y) & 0xF;
             for (int x = 0; x < fb.w; x++) {
-                int tileX = (((0x3F - xTimer) + x) >> 2) & 0xF;
+                int tileX = (((0x3F - xTimer) + x)) & 0xF;
 
                 fb.pixels[x + y * fb.w] = TILEMAP.pixels[(tileId.ix * 16 + tileX) + (tileId.iy * 16 + tileY) * TILEMAP.w];
             }
@@ -65,7 +64,7 @@ public class UIMainMenu extends UIBase {
             }
         }
 
-        Font.drawShadowCentered("A-RPG-G!", fb, fb.w / 2, 48, 0x00FF00, 5);
+        Font.drawShadowCentered("A-RPG-G!", fb, fb.w / 2, 12, 0x00FF00, 1);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.kirdow.arpgg.game.gui;
 
+import com.kirdow.arpgg.GameTimer;
 import com.kirdow.arpgg.game.Game;
+import com.kirdow.arpgg.gfx.Font;
 import com.kirdow.arpgg.gfx.Screen;
 
 public abstract class UIBase {
@@ -19,6 +21,14 @@ public abstract class UIBase {
 
     public abstract void tick();
     public abstract void draw(final Screen fb);
+
+    public final void drawInfo(final Screen fb) {
+        if (!(this instanceof UIMainMenu)) {
+            Font.draw("A-RPG-G", fb, 2, 2, 0xFFFFFF, 1);
+        }
+
+        Font.draw(String.format("T/F %d/%d", GameTimer.CURRENT_TPS, GameTimer.CURRENT_FPS), fb, 2, fb.h - 10, 0xFFFFFF, 1);
+    }
 
     public void init() {}
     public void dispose() {}
