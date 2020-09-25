@@ -1,8 +1,16 @@
 package com.kirdow.arpgg.game.level;
 
 import com.kirdow.arpgg.GameTimer;
+import com.kirdow.arpgg.game.entity.Entity;
+import com.kirdow.arpgg.game.entity.EntityPlayer;
 import com.kirdow.arpgg.game.level.tile.Tile;
 import com.kirdow.arpgg.gfx.Screen;
+import com.kirdow.arpgg.util.Vectori;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Level {
 
@@ -10,12 +18,23 @@ public class Level {
     private short[] tiles;
     private byte[] data;
 
+    private List<Entity> entityList;
+    public final Comparator<Entity> entitySorter = (o1, o2) -> {
+        if (o1.y < o2.y) return -1;
+        if (o1.y > o2.y) return +1;
+        return 0;
+    };
+    public EntityPlayer thePlayer;
+
     public Level(int w, int h) {
         this.w = w;
         this.h = h;
 
         tiles = new short[w*h];
         data = new byte[w*h];
+        entityList = new ArrayList<>();
+
+        addEntity(new EntityPlayer(this, 8.0f, 12f));
 
         for (int i = 0; i < w*h; i++) {
             tiles[i] = (short)1;
@@ -31,6 +50,7 @@ public class Level {
                 }
             }
         }
+        tiles[0] = (short)1;
     }
 
     public Tile getTile(int x, int y) {
@@ -57,29 +77,80 @@ public class Level {
         this.data[x + y * w] = (byte)data;
     }
 
-    public void tick() {
-        x += 20.0f * GameTimer.DELTA;
-        y += 30.0f * GameTimer.DELTA;
+    public void addEntity(Entity entity) {
+        this.entityList.add(entity);
     }
 
-    private float x;
-    private float y;
+    private void createPlayer() {
+        EntityPlayer player = new EntityPlayer(this, 0.0f, 0.0f);
+        this.addEntity(player);
+        thePlayer = player;
+    }
+
+    public void tick() {
+        if (thePlayer == null) {
+            createPlayer();
+        }
+
+        Entity entity = null;
+        for (int i = 0; i < entityList.size(); i++) {
+            entity = entityList.get(i);
+            if (entity == thePlayer)
+                continue;
+            entity.tick();
+        }
+
+        thePlayer.tick();
+    }
 
     public void draw(Screen fb) {
-        int xOffset = (int)x % 16;
-        int yOffset = (int)y % 16;
-        int xTileOffset = (int)x / 16;
-        int yTileOffset = (int)y / 16;
+        int x = (int)((thePlayer != null ? thePlayer.x : 0.0f) - fb.w / 2);
+        int y = (int)((thePlayer != null ? thePlayer.y : 0.0f) - (fb.h - 8) / 2);
+        Vectori drawPosition = new Vectori(x, y);
+
+        drawTiles(fb, drawPosition);
+        drawEntities(fb, drawPosition);
+    }
+
+    public void drawTiles(Screen fb, Vectori drawPos) {
+        int xOffset = drawPos.ix % 16;
+        int yOffset = drawPos.iy % 16;
+        int xTileOffset = drawPos.ix / 16;
+        int yTileOffset = drawPos.iy / 16;
 
         int wTiles = (int)Math.ceil(fb.w / 16.0) + 2;
         int hTiles = (int)Math.ceil(fb.h / 16.0) + 2;
 
-        for (int ry = -1; ry < hTiles; ry++) {
-            for (int rx = -1; rx < wTiles; rx++) {
-                Tile tile = getTile(rx + xTileOffset, ry + yTileOffset);
-                tile.draw(fb, rx * 16 - xOffset, ry * 16 - yOffset, getData(rx + xTileOffset, ry + yTileOffset));
+        fb.translate(drawPos.ix, drawPos.iy);
+        for (int ry = yTileOffset - 1; ry <= yTileOffset + hTiles; ry++) {
+            for (int rx = xTileOffset - 1; rx <= xTileOffset + wTiles; rx++) {
+                Tile tile = getTile(rx, ry);
+                int data = getData(rx, ry);
+                tile.draw(fb, rx * 16, ry * 16, data);
             }
         }
+        fb.resetTranslation();
+    }
+
+    public void drawEntities(Screen fb, Vectori drawPos) {
+        Entity entity;
+        Vectori b;
+
+        entityList.sort(entitySorter);
+
+        fb.translate(drawPos.ix, drawPos.iy);
+        for (int i = 0; i < entityList.size(); i++) {
+            entity = entityList.get(i);
+            if (entity != null) {
+                b = entity.bounds();
+                if (b == null) continue;
+
+                fb.translate(b.ix / 2, b.iy / 2);
+                entity.draw(fb);
+                fb.translate(-b.ix / 2, -b.iy / 2);
+            }
+        }
+        fb.resetTranslation();
     }
 
 
