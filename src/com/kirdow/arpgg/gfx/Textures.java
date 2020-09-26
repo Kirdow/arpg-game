@@ -2,10 +2,9 @@ package com.kirdow.arpgg.gfx;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Textures {
 
@@ -34,9 +33,23 @@ public class Textures {
                 alphaTexture256 = alphaTexture;
         }
         DEFAULT_ALPHA_TEXTURE = alphaTexture256;
+        File folder = new File(".data");
+        if (!folder.exists())
+            folder.mkdirs();
+        try {
+            Files.setAttribute(Paths.get(folder.toURI()), "dos:hidden", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < 3; i++) {
             int size = 1 << (i + 6);
-            saveTextureToFile(DEFAULT_ALPHA_TEXTURES[i], String.format("default_alpha_texture%d.png", size));
+            saveTextureToFile(DEFAULT_ALPHA_TEXTURES[i], String.format(".data/default_alpha_texture%d.png", size));
+        }
+        String readme = "These files are purely generated to have a pink/purple texture map ready for using.\nThey serve no purpose within the game itself.\nDon't bother editing or deleting as these will be re-created automatically when you next start the game.\nIf you want to remove this option, feel free to rebuild from source and remove the code in Textures.java (inside the static {} block) which saves files to disk.";
+        try {
+            Files.write(Paths.get(new File(".data", "readme.txt").toURI()), readme.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         TILEMAP = loadTextureFromResource("/tex/tilemap.png");
