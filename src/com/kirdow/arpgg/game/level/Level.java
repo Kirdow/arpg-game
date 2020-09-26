@@ -5,13 +5,14 @@ import com.kirdow.arpgg.game.entity.Entity;
 import com.kirdow.arpgg.game.entity.EntityPlayer;
 import com.kirdow.arpgg.game.level.tile.Tile;
 import com.kirdow.arpgg.gfx.Screen;
+import com.kirdow.arpgg.util.Box;
 import com.kirdow.arpgg.util.Vectori;
 
 import java.util.*;
 
 public class Level {
 
-    private int w, h;
+    public final int w, h;
     private short[] tiles;
     private byte[] data;
 
@@ -31,7 +32,7 @@ public class Level {
         data = new byte[w*h];
         entityList = new ArrayList<>();
 
-        addEntity(new EntityPlayer(this, 8, 12));
+        addEntity(new EntityPlayer(this, 0, 0));
 
         for (int i = 0; i < w*h; i++) {
             tiles[i] = (short)1;
@@ -73,7 +74,8 @@ public class Level {
     }
 
     private void createPlayer() {
-        EntityPlayer player = new EntityPlayer(this, 0, 0);
+        EntityPlayer player = new EntityPlayer(this);
+        player.findSpawn();
         this.addEntity(player);
         thePlayer = player;
     }
@@ -164,7 +166,7 @@ public class Level {
 
     public void drawEntities(Screen fb, Vectori drawPos) {
         Entity entity;
-        Vectori b;
+        Box b;
 
         entityList.sort(entitySorter);
 
@@ -172,12 +174,12 @@ public class Level {
         for (int i = 0; i < entityList.size(); i++) {
             entity = entityList.get(i);
             if (entity != null) {
-                b = entity.bounds();
+                b = Entity.DEFAULT_BOUNDS;
                 if (b == null) continue;
 
-                fb.translate(b.ix / 2, b.iy / 2);
+                fb.translate(b.w / 2, b.h / 2);
                 entity.draw(fb);
-                fb.translate(-b.ix / 2, -b.iy / 2);
+                fb.translate(-b.w / 2, -b.h / 2);
             }
         }
         fb.resetTranslation();

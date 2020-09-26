@@ -74,4 +74,9 @@ public class TileCobble extends Tile {
             }
         }
     }
+
+    @Override
+    public boolean isSolid() {
+        return true;
+    }
 }

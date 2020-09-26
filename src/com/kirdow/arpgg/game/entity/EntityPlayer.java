@@ -5,6 +5,7 @@ import com.kirdow.arpgg.game.level.Level;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.gfx.Textures;
 import com.kirdow.arpgg.input.Input;
+import com.kirdow.arpgg.util.Box;
 import com.kirdow.arpgg.util.TickerTimer;
 import com.kirdow.arpgg.util.Vectorf;
 import com.kirdow.arpgg.util.Vectori;
@@ -23,13 +24,24 @@ public class EntityPlayer extends Entity {
         super(0, level, x, y);
         lastX = x;
         lastY = y;
-        setBounds(new Vectori(16, 16));
+        setBounds(new Box(5, 11, 6, 5));
 
         inputTicker = new TickerTimer(3, this::playerInput);
     }
 
     public EntityPlayer(Level level) {
-        super(0, level);
+        this(level, 0, 0);
+    }
+
+    public void findSpawn() {
+        for (int y = 0; y < level.h; y++) {
+            for (int x = 0; x < level.w; x++) {
+                if (!level.getTile(x, y).isSolid()) {
+                    this.lastX = this.x = x * 16 + 8;
+                    this.lastY = this.y = y * 16 + 8;
+                }
+            }
+        }
     }
 
     @Override

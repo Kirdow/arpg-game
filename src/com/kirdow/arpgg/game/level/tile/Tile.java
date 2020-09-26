@@ -28,6 +28,10 @@ public class Tile {
         fb.drawTile(x, y, textureIndex);
     }
 
+    public boolean isSolid() {
+        return false;
+    }
+
     public static final Tile tileSand = new TileSand();
     public static final Tile tileCobble = new TileCobble();
 
