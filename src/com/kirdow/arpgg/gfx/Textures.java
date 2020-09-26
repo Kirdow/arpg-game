@@ -13,7 +13,7 @@ public class Textures {
     public static final Screen DEFAULT_ALPHA_TEXTURE;
     public static final Screen TILEMAP;
     public static final Screen ENTITYMAP;
-    public static final Screen COBBLEWALLS;
+    public static final Screen WALLS;
     public static final Screen FONT;
 
     static {
@@ -41,7 +41,7 @@ public class Textures {
 
         TILEMAP = loadTextureFromResource("/tex/tilemap.png");
         ENTITYMAP = loadTextureFromResource("/tex/entitymap.png");
-        COBBLEWALLS = loadTextureFromResource("/tex/cobblewalls.png");
+        WALLS = loadTextureFromResource("/tex/edgesections.png");
         FONT = loadTextureFromResource("/tex/font.png");
     }
 

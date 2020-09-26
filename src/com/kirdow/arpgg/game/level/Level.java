@@ -38,17 +38,21 @@ public class Level {
         Perlin perlin = new Perlin();
         double[] noise = perlin.generate(w, h, 0, 0);
         for (int i = 0; i < w*h; i++) {
-            if (noise[i] < 0.5) {
-                tiles[i] = (short)0;
+            int x = i % w;
+            int y = i / h;
+            if (x == 0 || y == 0 || x == w - 1 || y == h - 1) {
+                tiles[i] = Tile.tileWater.id;
+            } else if (noise[i] < 0.5) {
+                tiles[i] = Tile.tileSand.id;
             } else {
-                tiles[i] = (short)1;
+                tiles[i] = Tile.tileCobble.id;
             }
         }
     }
 
     public Tile getTile(int x, int y) {
         if (x < 0 || y < 0 || x >= w || y >= h) {
-            return Tile.tileSand;
+            return Tile.tileWater;
         }
 
         return Tile.TILES[tiles[x + y * w]];
@@ -96,21 +100,22 @@ public class Level {
 
         thePlayer.tick();
 
-        Tile tile;
+        Tile tile, tileTarget;
         boolean up, down, left, right;
         boolean ul, ur, dl, dr;
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 tile = getTile(x, y);
-                if (tile == Tile.tileCobble) {
-                    up = getTile(x, y - 1) != Tile.tileCobble;
-                    down = getTile(x, y + 1) != Tile.tileCobble;
-                    left = getTile(x - 1, y) != Tile.tileCobble;
-                    right = getTile(x + 1, y) != Tile.tileCobble;
-                    ul = getTile(x - 1, y - 1) != Tile.tileCobble;
-                    ur = getTile(x + 1, y - 1) != Tile.tileCobble;
-                    dl = getTile(x - 1, y + 1) != Tile.tileCobble;
-                    dr = getTile(x + 1, y + 1) != Tile.tileCobble;
+                if (tile == Tile.tileCobble || tile == Tile.tileWater) {
+                    tileTarget = (tile == Tile.tileCobble) ? Tile.tileCobble : Tile.tileWater;
+                    up = getTile(x, y - 1) != tileTarget;
+                    down = getTile(x, y + 1) != tileTarget;
+                    left = getTile(x - 1, y) != tileTarget;
+                    right = getTile(x + 1, y) != tileTarget;
+                    ul = getTile(x - 1, y - 1) != tileTarget;
+                    ur = getTile(x + 1, y - 1) != tileTarget;
+                    dl = getTile(x - 1, y + 1) != tileTarget;
+                    dr = getTile(x + 1, y + 1) != tileTarget;
 
                     int data = 0;
                     if (ul)
