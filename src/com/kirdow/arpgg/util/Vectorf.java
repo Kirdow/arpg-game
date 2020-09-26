@@ -33,13 +33,13 @@ public class Vectorf extends Vectori<Vectorf> {
     }
 
     public Vectorf mulf(float x) {
-        return new Vectorf((int)(this.x * x), (int)(this.y * x));
+        return new Vectorf(this.x * x, this.y * x);
     }
 
     public Vectorf divf(float f) {
         if (f == 0.0f) return ZERO;
 
-        return new Vectorf((int)(this.x / f), (int)(this.y / f));
+        return new Vectorf(this.x / f, this.y / f);
     }
 
     public float lengthf() {
@@ -57,7 +57,7 @@ public class Vectorf extends Vectori<Vectorf> {
         float x = this.x / len;
         float y = this.y / len;
 
-        return new Vectorf((int)x, (int)y);
+        return new Vectorf(x, y);
     }
 
 }
