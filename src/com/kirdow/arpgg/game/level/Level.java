@@ -7,10 +7,7 @@ import com.kirdow.arpgg.game.level.tile.Tile;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.util.Vectori;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Level {
 
@@ -34,21 +31,15 @@ public class Level {
         data = new byte[w*h];
         entityList = new ArrayList<>();
 
-        addEntity(new EntityPlayer(this, 8.0f, 12f));
+        addEntity(new EntityPlayer(this, 8, 12));
 
         for (int i = 0; i < w*h; i++) {
             tiles[i] = (short)1;
         }
+        Random r = new Random();
         for (int i = 0; i < w*h; i++) {
-            if (i < 2)
+            if (r.nextInt(2) == 0)
                 tiles[i] = (short)0;
-            else {
-                for (int j = 2; j < (w*h) / i; j++) {
-                    int k = i * j;
-                    if (k >= 0 && k < w*h)
-                        tiles[k] = (short)0;
-                }
-            }
         }
         tiles[0] = (short)1;
     }
@@ -82,7 +73,7 @@ public class Level {
     }
 
     private void createPlayer() {
-        EntityPlayer player = new EntityPlayer(this, 0.0f, 0.0f);
+        EntityPlayer player = new EntityPlayer(this, 0, 0);
         this.addEntity(player);
         thePlayer = player;
     }
@@ -101,6 +92,45 @@ public class Level {
         }
 
         thePlayer.tick();
+
+        Tile tile;
+        boolean up, down, left, right;
+        boolean ul, ur, dl, dr;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                tile = getTile(x, y);
+                if (tile == Tile.tileCobble) {
+                    up = getTile(x, y - 1) != Tile.tileCobble;
+                    down = getTile(x, y + 1) != Tile.tileCobble;
+                    left = getTile(x - 1, y) != Tile.tileCobble;
+                    right = getTile(x + 1, y) != Tile.tileCobble;
+                    ul = getTile(x - 1, y - 1) != Tile.tileCobble;
+                    ur = getTile(x + 1, y - 1) != Tile.tileCobble;
+                    dl = getTile(x - 1, y + 1) != Tile.tileCobble;
+                    dr = getTile(x + 1, y + 1) != Tile.tileCobble;
+
+                    int data = 0;
+                    if (ul)
+                        data |= 1 << 7;
+                    if (up)
+                        data |= 1 << 6;
+                    if (ur)
+                        data |= 1 << 5;
+                    if (left)
+                        data |= 1 << 4;
+                    if (right)
+                        data |= 1 << 3;
+                    if (dl)
+                        data |= 1 << 2;
+                    if (down)
+                        data |= 1 << 1;
+                    if (dr)
+                        data |= 1 << 0;
+
+                    setData(x, y, data);
+                }
+            }
+        }
     }
 
     public void draw(Screen fb) {

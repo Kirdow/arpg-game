@@ -7,13 +7,13 @@ import com.kirdow.arpgg.util.Vectori;
 public class Entity {
 
     public final int id;
-    public float x, y;
+    public int x, y;
 
     protected final Level level;
 
     private Vectori bounds;
 
-    public Entity(int id, Level level, float x, float y) {
+    public Entity(int id, Level level, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -21,7 +21,7 @@ public class Entity {
     }
 
     public Entity(int id, Level level) {
-        this(id, level, 0.0f, 0.0f);
+        this(id, level, 0, 0);
     }
 
     public Level getLevel() {
@@ -31,14 +31,14 @@ public class Entity {
     public void tick() {}
     public void draw(Screen fb) {}
 
-    public void move(float x, float y) {
+    public void move(int x, int y) {
         if (x != 0 && move2(x, 0))
             this.x += x;
         if (y != 0 && move2(0, y))
             this.y += y;
     }
 
-    public boolean move2(float x, float y) {
+    public boolean move2(int x, int y) {
         if (x != 0 && y != 0)
             return false;
 

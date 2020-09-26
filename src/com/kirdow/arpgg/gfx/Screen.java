@@ -78,9 +78,14 @@ public class Screen {
     }
 
     public void drawTexture(int x, int y, int w, int h, int u, int v, Screen texture) {
+        this.drawTexture(x, y, w, h, u, v, texture, false);
+    }
+
+    public void drawTexture(int x, int y, int w, int h, int u, int v, Screen texture, boolean mirror) {
         x -= xTrans;
         y -= yTrans;
 
+        int pixel;
         for (int fy = 0; fy < h; fy++) {
             int py = fy + y;
             if (py < 0 || py >= this.h)
@@ -96,12 +101,26 @@ public class Screen {
                     continue;
 
                 int tx = fx + u;
+                if (mirror) {
+                    tx = u + w - fx - 1;
+                }
                 if (tx < 0 || tx >= texture.w)
                     continue;
 
-                pixels[px + py * this.w] = texture.pixels[tx + ty * texture.w];
+                pixel = texture.pixels[tx + ty * texture.w];
+                if (pixel == 0xFF00FF || pixel == 0x7F007F) continue;
+                pixels[px + py * this.w] = pixel;
             }
         }
+    }
+
+    public void drawAnimation(int x, int y, int w, int h, int u, int v, int frameTime, int frameCount, Screen texture) {
+        drawAnimation(x, y, w, h, u, v, frameTime, frameCount, texture, false);
+    }
+
+    public void drawAnimation(int x, int y, int w, int h, int u, int v, int frameTime, int frameCount, Screen texture, boolean mirror) {
+        int frame = (int)(System.currentTimeMillis() % (frameTime * frameCount)) / frameTime;
+        drawTexture(x, y, w, h, u + w * frame, v, texture, mirror);
     }
 
 }

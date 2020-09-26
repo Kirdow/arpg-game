@@ -10,7 +10,7 @@ public class Tile {
     public final short id;
     public final int textureX, textureY, textureIndex, textureId;
 
-    public Tile(int id) {
+    public Tile(int id, int texture) {
         this.id = (short)id;
         if (id < 0 || id >= TILES_MAX)
             throw new RuntimeException(String.format("Invalid tile id %d! Valid range is 0-%d.", id, TILES_MAX-1));
@@ -18,8 +18,8 @@ public class Tile {
             throw new RuntimeException("Duplicate Tile ID found");
         TILES[id] = this;
 
-        textureId = id / 256;
-        textureIndex = id % 256;
+        textureId = texture / 256;
+        textureIndex = texture % 256;
         textureX = textureIndex % 16;
         textureY = textureIndex / 16;
     }
