@@ -60,7 +60,7 @@ public class Display extends Canvas {
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
 
-        frame = new JFrame("ARPGG");
+        frame = new JFrame("ARPGG - V. " + Game.VERSION);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(this);
         frame.setResizable(false);

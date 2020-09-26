@@ -56,4 +56,6 @@ public class Game {
         return game != null ? game : new Game();
     }
 
+    public static final String VERSION = "alpha0";
+
 }
