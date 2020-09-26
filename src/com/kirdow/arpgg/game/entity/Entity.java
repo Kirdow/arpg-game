@@ -58,12 +58,12 @@ public class Entity {
             for (int tileX = x0; tileX <= x1; tileX++) {
                 tile = level.getTile(tileX, tileY);
                 if (tile.isSolid() && entityBounds.intersect(tileX * 16, tileY * 16, 16, 16)) {
-                    System.out.println(tileX + " " + tileY + " " + this.x + " " + this.y);
                     return false;
                 }
             }
         }
-        // TODO: Implement tile & entity collision detection
+        
+        // TODO: Implement entity collision detection
 
         return true;
     }
