@@ -23,8 +23,11 @@ public abstract class UIBase {
     public abstract void draw(final Screen fb);
 
     public final void drawInfo(final Screen fb) {
-        if (!(this instanceof UIMainMenu)) {
-            Font.draw("A-RPG-G", fb, 2, 2, 0xFFFFFF, 1);
+        if (this instanceof UIGame) {
+            UIGame uiGame = (UIGame)this;
+            if (uiGame.isPaused()) {
+                Font.draw("A-RPG-G", fb, 2, 2, 0xFFFFFF, 1);
+            }
         }
 
         Font.draw(String.format("T/F %d/%d", GameTimer.CURRENT_TPS, GameTimer.CURRENT_FPS), fb, 2, fb.h - 10, 0xFFFFFF, 1);

@@ -96,15 +96,7 @@ public class UIGame extends UIBase {
         }
     }
 
-    public int getTileFromPixel(int x, int y) {
-        x = (int)((x  + this.playerX * 4.0f) / 64.0f);
-        y = (int)((y  + this.playerY * 4.0f) / 64.0f);
-
-        return getTile(x, y);
-    }
-
-    public int getTile(int x, int y) {
-        int p = (x + y) % 2;
-        return p < 0 ? (p + 2) : p;
+    public boolean isPaused() {
+        return pauseMenu != null;
     }
 }
