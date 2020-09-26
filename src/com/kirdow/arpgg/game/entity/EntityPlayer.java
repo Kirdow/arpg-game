@@ -25,7 +25,7 @@ public class EntityPlayer extends Entity {
         lastY = y;
         setBounds(new Vectori(16, 16));
 
-        inputTicker = new TickerTimer(5, this::playerInput);
+        inputTicker = new TickerTimer(3, this::playerInput);
     }
 
     public EntityPlayer(Level level) {
