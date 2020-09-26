@@ -6,6 +6,7 @@ import com.kirdow.arpgg.game.entity.EntityPlayer;
 import com.kirdow.arpgg.game.level.tile.Tile;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.util.Box;
+import com.kirdow.arpgg.util.Perlin;
 import com.kirdow.arpgg.util.Vectori;
 
 import java.util.*;
@@ -34,15 +35,15 @@ public class Level {
 
         addEntity(new EntityPlayer(this, 0, 0));
 
+        Perlin perlin = new Perlin();
+        double[] noise = perlin.generate(w, h, 0, 0);
         for (int i = 0; i < w*h; i++) {
-            tiles[i] = (short)1;
-        }
-        Random r = new Random();
-        for (int i = 0; i < w*h; i++) {
-            if (r.nextInt(2) == 0)
+            if (noise[i] < 0.5) {
                 tiles[i] = (short)0;
+            } else {
+                tiles[i] = (short)1;
+            }
         }
-        tiles[0] = (short)1;
     }
 
     public Tile getTile(int x, int y) {
