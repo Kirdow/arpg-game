@@ -46,16 +46,25 @@ public class Input implements MouseListener, KeyListener, MouseMotionListener {
         return M_Y;
     }
 
-    private static void setKeys(int kc, boolean st) {
-        if (kc < 0 || kc > 255)
+    private static void setKeys(int ch, int kc, boolean st) {
+        if (ch == 0xffff) {
+            if (kc >= 16 && kc <= 20) {
+                KEYS[kc] = st;
+                return;
+            }
+        } else if ((ch >= 1 && ch <= 26) && (kc >= 'A' && kc <= 'Z')) {
+            ch += 96;
+        }
+
+        if (ch < 0 || ch > 255)
             return;
 
-        if (kc >= 'A' && kc <= 'Z')
-            KEYS[kc + 0x20] = st;
-        else if (kc >= 'a' && kc <= 'z')
-            KEYS[kc - 0x20] = st;
+        if (ch >= 'A' && ch <= 'Z')
+            KEYS[ch + 0x20] = st;
+        else if (ch >= 'a' && ch <= 'z')
+            KEYS[ch - 0x20] = st;
 
-        KEYS[kc] = st;
+        KEYS[ch] = st;
     }
 
     private static void setButtons(int bc, boolean st) {
@@ -112,16 +121,18 @@ public class Input implements MouseListener, KeyListener, MouseMotionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        char kc = e.getKeyChar();
+        int ch = e.getKeyChar();
+        int kc = e.getKeyCode();
 
-        setKeys(kc, true);
+        setKeys(ch, kc, true);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        char kc = e.getKeyChar();
+        int ch = e.getKeyChar();
+        int kc = e.getKeyCode();
 
-        setKeys(kc, false);
+        setKeys(ch, kc, false);
     }
 
     @Override

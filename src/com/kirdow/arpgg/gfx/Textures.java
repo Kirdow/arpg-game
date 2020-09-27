@@ -14,6 +14,7 @@ public class Textures {
     public static final Screen ENTITYMAP;
     public static final Screen WALLS;
     public static final Screen FONT;
+    public static final Screen ATTACKANIMATIONS;
 
     static {
         Screen alphaTexture256 = null;
@@ -56,6 +57,7 @@ public class Textures {
         ENTITYMAP = loadTextureFromResource("/tex/entitymap.png");
         WALLS = loadTextureFromResource("/tex/edgesections.png");
         FONT = loadTextureFromResource("/tex/font.png");
+        ATTACKANIMATIONS = loadTextureFromResource("/tex/attackanims.png");
     }
 
     public static final Screen loadTextureFromResource(final String path) {

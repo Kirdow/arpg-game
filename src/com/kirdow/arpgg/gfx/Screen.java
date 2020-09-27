@@ -120,6 +120,14 @@ public class Screen {
 
     public void drawAnimation(int x, int y, int w, int h, int u, int v, int frameTime, int frameCount, Screen texture, boolean mirror) {
         int frame = (int)(System.currentTimeMillis() % (frameTime * frameCount)) / frameTime;
+        drawAnimationFrame(x, y, w, h, u, v, frame, texture, mirror);
+    }
+
+    public void drawAnimationFrame(int x, int y, int w, int h, int u, int v, int frame, Screen texture) {
+        drawAnimationFrame(x, y, w, h, u, v, frame, texture, false);
+    }
+
+    public void drawAnimationFrame(int x, int y, int w, int h, int u, int v, int frame, Screen texture, boolean mirror) {
         drawTexture(x, y, w, h, u + w * frame, v, texture, mirror);
     }
 

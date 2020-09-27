@@ -4,15 +4,13 @@ import com.kirdow.arpgg.GameTimer;
 import com.kirdow.arpgg.game.level.Level;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.input.Input;
+import com.kirdow.arpgg.input.KeyBindings;
 
 import java.awt.event.KeyEvent;
 
 public class UIGame extends UIBase {
 
     private UIPauseMenu pauseMenu;
-
-    private float playerX;
-    private float playerY;
 
     private Level level;
 
@@ -24,9 +22,6 @@ public class UIGame extends UIBase {
     @Override
     public void init() {
         super.init();
-
-        playerX = 0;
-        playerY = 0;
 
         level = new Level(64, 64);
     }
@@ -41,27 +36,6 @@ public class UIGame extends UIBase {
         if (level != null) {
             level.tick();
         }
-        int xMove = 0, yMove = 0;
-        float speed = 12f;
-
-        if (Input.isKeyDown(KeyEvent.VK_A)) {
-            --xMove;
-        }
-        if (Input.isKeyDown(KeyEvent.VK_D)) {
-            ++xMove;
-        }
-
-        if (Input.isKeyDown(KeyEvent.VK_W)) {
-            --yMove;
-        }
-        if (Input.isKeyDown(KeyEvent.VK_S)) {
-            ++yMove;
-        }
-
-        if (xMove != 0)
-            playerX += GameTimer.DELTA * xMove * speed;
-        if (yMove != 0)
-            playerY += GameTimer.DELTA * yMove * speed;
     }
 
     @Override
@@ -80,7 +54,7 @@ public class UIGame extends UIBase {
         if (this.pauseMenu != null) {
             this.pauseMenu.keyTyped(typedChar, charCode);
             return;
-        } else if (typedChar == KeyEvent.VK_ESCAPE) {
+        } else if (typedChar == KeyBindings.CANCEL.getKeyCode()) {
             this.pauseMenu = new UIPauseMenu(this);
             this.pauseMenu.init();
             return;

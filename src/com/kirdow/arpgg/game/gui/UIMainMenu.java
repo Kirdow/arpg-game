@@ -4,6 +4,7 @@ import com.kirdow.arpgg.GameTimer;
 import com.kirdow.arpgg.gfx.Font;
 import com.kirdow.arpgg.gfx.Screen;
 import com.kirdow.arpgg.gfx.Textures;
+import com.kirdow.arpgg.input.KeyBindings;
 import com.kirdow.arpgg.util.Vectori;
 
 import java.awt.event.KeyEvent;
@@ -70,7 +71,7 @@ public class UIMainMenu extends UIBase {
 
     @Override
     public void keyTyped(char typedChar, int charCode) {
-        if (typedChar == KeyEvent.VK_SPACE) {
+        if (typedChar == KeyBindings.SELECT.getKeyCode()) {
             game.setCurrentGui(new UIGame());
         }
     }

@@ -1,6 +1,7 @@
 package com.kirdow.arpgg.game.gui;
 
 import com.kirdow.arpgg.gfx.Screen;
+import com.kirdow.arpgg.input.KeyBindings;
 
 import java.awt.event.KeyEvent;
 
@@ -31,7 +32,7 @@ public class UIPauseMenu extends UIBase {
 
     @Override
     public void keyTyped(char typedChar, int charCode) {
-        if (typedChar == KeyEvent.VK_ESCAPE) {
+        if (typedChar == KeyBindings.CANCEL.getKeyCode()) {
             gameUi.unpause();
             return;
         }
